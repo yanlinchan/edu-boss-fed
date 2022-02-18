@@ -20,3 +20,10 @@ export const login = (data: User) : AxiosPromise => {
     data: qs.stringify(data)
   })
 }
+
+export const getUserInfo = () : AxiosPromise => {
+  return request({
+    method: 'GET',
+    url: '/front/user/getInfo'
+  })
+}

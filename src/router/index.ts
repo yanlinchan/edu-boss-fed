@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Layout from '@/layout/index.vue'
+import store from '@/store'
 
 Vue.use(VueRouter)
 
@@ -14,36 +15,43 @@ const routes: Array<RouteConfig> = [
   {
     path: '/',
     component: Layout,
+    meta: { requiresAuth: true },
     children: [
       {
         path: '', // 默认子路由
         name: 'home',
         component: () => import(/* webpackChunkName: 'home' */ '@/views/home/index.vue')
+
       },
       {
         path: '/role',
         name: 'role',
         component: () => import(/* webpackChunkName: 'role' */ '@/views/role/index.vue')
+
       },
       {
         path: '/menu',
         name: 'menu',
         component: () => import(/* webpackChunkName: 'menu' */ '@/views/menu/index.vue')
+
       },
       {
         path: '/resource',
         name: 'resource',
         component: () => import(/* webpackChunkName: 'resource' */ '@/views/resource/index.vue')
+
       },
       {
         path: '/course',
         name: 'course',
-        component: () => import(/* webpackChunkName: 'course' */ '@/views/course/index.vue')
+        component: () => import(/* webpackChunkName: 'course' */ '@/views/course/index.vue'),
+        meta: { requiresAuth: true }
       },
       {
         path: '/user',
         name: 'user',
-        component: () => import(/* webpackChunkName: 'user' */ '@/views/user/index.vue')
+        component: () => import(/* webpackChunkName: 'user' */ '@/views/user/index.vue'),
+        meta: { requiresAuth: true }
       },
       {
         path: '/advert',
@@ -66,6 +74,30 @@ const routes: Array<RouteConfig> = [
 
 const router = new VueRouter({
   routes
+})
+
+// 全局前置卫士，任何页面的访问都要经过这里
+// to 要去的路由的信息
+// from 从哪里来的路由的信息
+// next 通行的标记
+router.beforeEach((to, from, next) => {
+  // to.matched 是一个数组（匹配到的路由记录），包含路由和它的父路由
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!store.state.user) {
+      // 跳转到登录页面
+      next({
+        name: 'login',
+        query: {
+          redirect: to.fullPath // 登录后跳转的页面
+        }
+      })
+    } else {
+      next()
+    }
+  } else {
+    // 不需要身份认证
+    next()
+  }
 })
 
 export default router
