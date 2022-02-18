@@ -1,4 +1,16 @@
 module.exports = {
+  devServer: {
+    proxy: {
+      '/boss': {
+        target: 'http://eduboss.lagounews.com',
+        changeOrigin: true // 把请求头中的 host 配置为 target
+      },
+      '/front': {
+        target: 'http://edufront.lagounews.com',
+        changeOrigin: true // 把请求头中的 host 配置为 target
+      }
+    }
+  },
   css: {
     loaderOptions: {
       // 默认情况下 `sass` 选项会同时对 `sass` 和 `scss` 语法同时生效
