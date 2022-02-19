@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * 资源相关请求模块
  */
@@ -44,7 +45,7 @@ export const getAllResources = (): AxiosPromise => {
 /**
  * 给角色分配资源
  */
-export const allocateRoleResources = (data: { roleId: number, resourceIdList: [] }): AxiosPromise => {
+export const allocateRoleResources = (data: { roleId: number | string, resourceIdList: number[] }): AxiosPromise => {
   return request({
     method: 'POST',
     url: '/boss/resource/allocateRoleResources',
