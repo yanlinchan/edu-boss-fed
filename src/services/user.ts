@@ -10,7 +10,7 @@ interface User {
   password: string
 }
 
-export const login = (data: User) : AxiosPromise => {
+export const login = (data: User): AxiosPromise => {
   return request({
     method: 'POST',
     url: '/front/user/login',
@@ -21,9 +21,27 @@ export const login = (data: User) : AxiosPromise => {
   })
 }
 
-export const getUserInfo = () : AxiosPromise => {
+export const getUserInfo = (): AxiosPromise => {
   return request({
     method: 'GET',
     url: '/front/user/getInfo'
+  })
+}
+
+export const getUserPages = (data: any): AxiosPromise => {
+  return request({
+    method: 'POST',
+    url: '/boss/user/getUserPages',
+    data
+  })
+}
+
+export const forbidUser = (userId: string | number): AxiosPromise => {
+  return request({
+    method: 'POST',
+    url: '/boss/user/forbidUser',
+    params: {
+      userId
+    }
   })
 }
